@@ -5,6 +5,9 @@
   "username": "postgres",
   "password": "123456",
   "database": "gcb_database",
+  "entities": [
+    "./src/models/*.ts"
+  ],
   "migrations": [
 		"./src/database/migrations/*.ts"
 	],

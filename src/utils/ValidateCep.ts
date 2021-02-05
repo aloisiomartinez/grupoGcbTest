@@ -1,9 +1,7 @@
-export default function validatedCep(str: string) {
-  const re = /^([\d]{2})\.?([\d]{3})\-?([\d]{3})/;
+export default function validatedCep(cepToFormat: string) {
+  const regExp = /[0-9]{5}-[\d]{3}/g;
 
-  if (!re.test(str)) {
-    throw new Error('Insira um cep Válido, Exemplo: 11.111.11');
-  }
+  const cepValidation = regExp.test(cepToFormat);
 
-  return '';
+  return cepValidation;
 }

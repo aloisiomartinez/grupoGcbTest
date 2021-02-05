@@ -11,6 +11,7 @@ export default class CreateDoctors1612476544723 implements MigrationInterface {
             type: 'varchar',
             isPrimary: true,
             generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'name',
@@ -23,11 +24,11 @@ export default class CreateDoctors1612476544723 implements MigrationInterface {
           },
           {
             name: 'phone',
-            type: 'INTEGER',
+            type: 'decimal',
           },
           {
             name: 'cellphone',
-            type: 'INTEGER',
+            type: 'decimal',
           },
           {
             name: 'cep',
@@ -52,6 +53,16 @@ export default class CreateDoctors1612476544723 implements MigrationInterface {
           {
             name: 'specialty',
             type: 'varchar',
+          },
+          {
+            name: 'createdAt',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updatedAt',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),

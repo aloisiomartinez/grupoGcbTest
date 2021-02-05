@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('doctors')
 class Doctor {
@@ -11,10 +17,10 @@ class Doctor {
   @Column()
   crm: string;
 
-  @Column('integer')
+  @Column('decimal')
   phone: number;
 
-  @Column('integer')
+  @Column('decimal')
   cellphone: number;
 
   @Column()
@@ -32,8 +38,14 @@ class Doctor {
   @Column()
   uf: string;
 
-  @Column('array')
+  @Column('text', { array: true })
   specialty: string[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
 
 export default Doctor;

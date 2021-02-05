@@ -1,46 +1,28 @@
 import { Router } from 'express';
 
-import DoctorsRepository from '../repositories/DoctorsRepository';
-import CreateNewDoctorService from '../services/CreateNewDoctorService';
+import DoctorController from '../controllers/DoctorController';
 
 const doctorsRouter = Router();
-const doctorsRepository = new DoctorsRepository();
+const doctorController = new DoctorController();
 
-// Receber a requisição, chamar outro arquivo, e devolver uma resposta
+doctorsRouter.get('/', doctorController.getAll);
+doctorsRouter.get('/:name', doctorController.getByName);
+doctorsRouter.get('/crm/:crm', doctorController.getByCrm);
+doctorsRouter.get('/phone/:phone', doctorController.getByPhone);
+doctorsRouter.get('/cellphone/:cellphone', doctorController.getByCellphone);
+doctorsRouter.get('/cep/:cep', doctorController.getByCep);
+doctorsRouter.get('/logradouro/:logradouro', doctorController.getByLogradouro);
+doctorsRouter.get(
+  '/neighborhood/:neighborhood',
+  doctorController.getByNeighborhood,
+);
+doctorsRouter.get('/city/:city', doctorController.getByCity);
+doctorsRouter.get('/uf/:uf', doctorController.getByUf);
 
-doctorsRouter.get('/', (request, response) => {
-  const doctors = doctorsRepository.all();
+doctorsRouter.post('/', doctorController.create);
 
-  return response.json(doctors);
-});
+doctorsRouter.put('/:id', doctorController.update);
 
-doctorsRouter.get('/name', (request, response) => {
-  const { name } = request.body;
-
-  const doctors = doctorsRepository.getDoctorByName(name);
-
-  return response.json(doctors);
-});
-
-doctorsRouter.post('/', async (request, response) => {
-  try {
-    const { name, crm, phone, cellphone, cep, specialty } = request.body;
-
-    const createNewDoctor = new CreateNewDoctorService(doctorsRepository);
-
-    const doctor = await createNewDoctor.execute({
-      name,
-      crm,
-      phone,
-      cellphone,
-      cep,
-      specialty,
-    });
-
-    return response.json(doctor);
-  } catch (err) {
-    return response.status(400).json({ error: err.message });
-  }
-});
+doctorsRouter.delete('/:id', doctorController.delete);
 
 export default doctorsRouter;

@@ -1,9 +1,12 @@
 import axios from 'axios';
+import { getCustomRepository } from 'typeorm';
+
 import Doctor from '../models/Doctor';
 import DoctorsRepository from '../repositories/DoctorsRepository';
 // import RequestApiCep from '../clients/RequestApiCep';
 import validateCep from '../utils/ValidateCep';
 import validateCrm from '../utils/ValidateCrm';
+import validateSpecialties from '../utils/ValidateSpecialties';
 
 interface Request {
   name: string;
@@ -22,12 +25,6 @@ interface ResponseApiCep {
 }
 
 class CreateNewDoctorService {
-  private doctorsRepository: DoctorsRepository;
-
-  constructor(doctorsRepository: DoctorsRepository) {
-    this.doctorsRepository = doctorsRepository;
-  }
-
   public async execute({
     name,
     crm,
@@ -36,28 +33,14 @@ class CreateNewDoctorService {
     cep,
     specialty,
   }: Request): Promise<Doctor> {
-    const specialtiesFiltered = [''];
-    const specialties = [
-      'ALERGOLOGIA',
-      'ANGIOLOGIA',
-      'BUCO MAXILO',
-      'CARDIOLOGIA CLÍNICA',
-      'CARDIOLOGIA INFANTIL',
-      'CIRURGIA CABEÇA E PESCOÇO',
-      'CIRURGIA CARDÍACA',
-      'CIRURGIA DE TÓRAX',
-    ];
+    const doctorsRepository = getCustomRepository(DoctorsRepository);
 
-    // Validations of specialties
-    if (specialty.length < 2) {
-      throw Error('Specialty should have 2');
-    }
+    // validate Specialty
+    const specialtiesFiltered = validateSpecialties(specialty);
 
-    specialty.filter((element) => {
-      if (specialties.includes(element.toUpperCase())) {
-        specialtiesFiltered.push(element.toUpperCase());
-      }
-    });
+    // Validate CEP and CRM
+    validateCep(cep);
+    validateCrm(crm);
 
     // Request API to search zip addresses
     const response = await axios.get<ResponseApiCep>(
@@ -65,24 +48,25 @@ class CreateNewDoctorService {
     );
 
     const { localidade, bairro, uf, logradouro } = response.data;
+    console.log(localidade, bairro, uf, logradouro);
+    if (!localidade || !bairro || !uf || !logradouro) {
+      throw 'This zip code did not find addresses related to it.';
+    }
 
-    // Validate CEP and CRM
-    const cepFormmated = validateCep(cep);
-
-    const crmFormatted = validateCrm(crm);
-
-    const doctor = this.doctorsRepository.create({
+    const doctor = doctorsRepository.create({
       name,
-      crm: crmFormatted,
+      crm,
       phone,
       cellphone,
-      cep: cepFormmated,
+      cep,
       logradouro,
       neighborhood: bairro,
       city: localidade,
       uf,
       specialty: specialtiesFiltered,
     });
+
+    await doctorsRepository.save(doctor);
 
     return doctor;
   }

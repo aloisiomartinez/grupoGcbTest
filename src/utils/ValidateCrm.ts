@@ -1,15 +1,7 @@
 export default function validatedCrm(crmToFormat: string) {
-  const regExp = /^([\d]{2})\.?([\d]{3})\.?([\d]{2})/;
+  const regExp = /[0-9]{2}[.][\d]{3}[.][\d]{2}/g;
 
   const crmValidation = regExp.test(crmToFormat);
 
-  if (!regExp.test(crmToFormat)) {
-    throw new Error('Insira um CRM Válido, Exemplo: 11.111.11');
-  }
-  console.log('crmvali', crmValidation);
-  if (!crmValidation) {
-    throw new Error('Insira um CRM Válido, Exemplo: 11.111.11');
-  }
-
-  return crmToFormat;
+  return crmValidation;
 }

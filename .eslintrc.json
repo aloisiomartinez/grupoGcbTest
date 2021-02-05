@@ -24,6 +24,8 @@
   ],
   "rules": {
     "prettier/prettier": "error",
+    "no-throw-literal":"off",
+    "no-useless-escape":"off",
     "class-methods-use-this":"off",
     "import/extensions": [
       "error",
