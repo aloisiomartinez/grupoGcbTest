@@ -1,4 +1,4 @@
-# Grupo Gcb - Back-end Teste
+# Grupo GCB - Back-end Teste
 
 
 <div align="center">
