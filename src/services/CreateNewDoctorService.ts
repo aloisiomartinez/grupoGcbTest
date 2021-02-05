@@ -3,7 +3,6 @@ import { getCustomRepository } from 'typeorm';
 
 import Doctor from '../models/Doctor';
 import DoctorsRepository from '../repositories/DoctorsRepository';
-// import RequestApiCep from '../clients/RequestApiCep';
 import validateCep from '../utils/ValidateCep';
 import validateCrm from '../utils/ValidateCrm';
 import validateSpecialties from '../utils/ValidateSpecialties';
