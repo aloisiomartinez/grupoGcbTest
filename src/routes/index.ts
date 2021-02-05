@@ -7,4 +7,5 @@ const routes = Router();
 
 routes.use('/doctors', doctorsRouter);
 routes.use('/endpoints', endPoints);
+
 export default routes;
