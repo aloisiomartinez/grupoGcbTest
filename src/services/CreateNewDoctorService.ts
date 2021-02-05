@@ -47,7 +47,7 @@ class CreateNewDoctorService {
     );
 
     const { localidade, bairro, uf, logradouro } = response.data;
-    console.log(localidade, bairro, uf, logradouro);
+
     if (!localidade || !bairro || !uf || !logradouro) {
       throw 'This zip code did not find addresses related to it.';
     }
